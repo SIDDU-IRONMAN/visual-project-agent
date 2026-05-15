@@ -1,0 +1,5 @@
+google-genai
+firecrawl-py
+pydantic
+python-dotenv
+pillow
