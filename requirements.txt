@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-python-multipart
-google-genai
-firecrawl-py
-pydantic
-python-dotenv
-pillow

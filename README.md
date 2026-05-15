@@ -16,9 +16,14 @@ A multimodal AI agent that takes an image of a product, identifies it using Gemi
    cd visual-project-agent
    ```
 
-2. **Install dependencies**:
+2. **Install dependencies (using uv)**:
+   This project uses `uv` for lightning-fast dependency management.
    ```bash
-   pip install -r requirements.txt
+   # Install uv if you haven't already
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+
+   # Sync dependencies and create virtual environment
+   uv sync
    ```
 
 3. **Configure Environment Variables**:
@@ -31,15 +36,15 @@ A multimodal AI agent that takes an image of a product, identifies it using Gemi
 ## Usage
 
 ### CLI Version
-Run the agent by providing a path to a product image:
+Run the agent using `uv run`:
 ```bash
-python main.py path/to/your/image.jpg
+uv run main.py path/to/your/image.jpg
 ```
 
 ### Web Version (SPA)
 1. **Start the Backend**:
    ```bash
-   uvicorn backend.api:app --reload
+   uv run uvicorn backend.api:app --reload
    ```
    The API will be available at `http://localhost:8000`.
 
