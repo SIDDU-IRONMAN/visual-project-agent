@@ -41,8 +41,9 @@ def synthesize_product_data(
     Requirements:
     1. **Official Description**: Write a cohesive, marketing-ready description (2-4 paragraphs) based on the web research. If no research is found, describe it based on visual features.
     2. **Technical Specifications**: Extract EVERY technical detail found in the research (e.g., Battery Life, Connectivity, Dimensions, Weight, Materials, Features). If no research is available, list specs that are visually obvious.
-    3. **Accuracy**: Prioritize data from official product pages or reputable tech review sites found in the research context.
-    4. **Formatting**: Ensure the output strictly follows the provided JSON schema.
+    3. **Pricing (INR)**: Research and provide an estimated retail value range specifically in **Indian Rupees (INR)**.
+    4. **Accuracy**: Prioritize data from official product pages or reputable tech review sites found in the research context.
+    5. **Formatting**: Ensure the output strictly follows the provided JSON schema.
     """
     
     try:

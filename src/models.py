@@ -13,5 +13,5 @@ class ProductCatalogEntry(BaseModel):
     visual_features: List[str] = Field(default_factory=list, description="Key visual characteristics identified from the image")
     specifications: List[ProductSpecification] = Field(default_factory=list, description="Technical specifications extracted from research")
     estimated_retail_value_range: Optional[str] = Field(None, description="Estimated market value (e.g., '$299 - $349')")
-    currency: str = Field(default="USD", description="Currency used for value range")
+    currency: str = Field(default="INR", description="Currency used for value range")
     source_urls: List[str] = Field(default_factory=list, description="URLs where product information was gathered")
