@@ -1,31 +1,52 @@
-from firecrawl import FirecrawlApp
+from firecrawl import Firecrawl
 from typing import List, Dict
+from .utils import get_logger, ResearchError
+
+logger = get_logger(__name__)
 
 def perform_research(query: str, api_key: str) -> Dict[str, str]:
     """
     Uses Firecrawl to search for a product and scrape the top results for specifications.
     Returns a dictionary mapping URLs to their markdown content.
     """
-    app = FirecrawlApp(api_key=api_key)
+    logger.info(f"Initiating research for query: {query}")
+    app = Firecrawl(api_key=api_key)
     
-    # Perform search to find relevant product pages
-    print(f"Searching for: {query}...")
-    search_result = app.search(query, params={"limit": 2})
-    
-    if not search_result or 'data' not in search_result:
-        print("No search results found.")
-        return {}
-    
-    results = {}
-    for item in search_result['data']:
-        url = item.get('url')
-        if url:
-            print(f"Scraping: {url}...")
-            try:
-                scrape_result = app.scrape_url(url, params={"formats": ["markdown"]})
-                if scrape_result and 'markdown' in scrape_result:
-                    results[url] = scrape_result['markdown']
-            except Exception as e:
-                print(f"Failed to scrape {url}: {e}")
-                
-    return results
+    try:
+        response = app.search(
+            query, 
+            limit=2, 
+            scrape_options={"formats": ["markdown"]}
+        )
+        
+        # Support various response formats from Firecrawl v2
+        search_results = response
+        if hasattr(response, 'data'):
+            search_results = response.data
+        elif isinstance(response, dict) and 'data' in response:
+            search_results = response['data']
+        elif isinstance(response, tuple):
+            search_results = response[0]
+            if hasattr(search_results, 'data'):
+                search_results = search_results.data
+            elif isinstance(search_results, dict) and 'data' in search_results:
+                search_results = search_results['data']
+        
+        if not search_results or not isinstance(search_results, list):
+            logger.warning(f"No research results found for query: {query}")
+            return {}
+        
+        results = {}
+        for item in search_results:
+            if not isinstance(item, dict):
+                continue
+            url = item.get('url')
+            markdown = item.get('markdown')
+            if url and markdown:
+                logger.info(f"Retrieved content from: {url}")
+                results[url] = markdown
+                    
+        return results
+    except Exception as e:
+        logger.error(f"Firecrawl research failed: {e}")
+        raise ResearchError(f"Research failed: {e}")
