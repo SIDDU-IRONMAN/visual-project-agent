@@ -3,9 +3,10 @@
 A multimodal AI agent that takes an image of a product, identifies it using Gemini Vision, researches details using Firecrawl, and outputs a structured JSON catalog entry.
 
 ## Features
-- **Visual Identification**: Uses Gemini 2.0 Flash to identify brand, model, and features from an image.
-- **Deep Research**: Uses Firecrawl to search the web and scrape official specifications.
+- **Visual Identification**: Uses Gemini (Flash) to identify brand, model, and features from an image.
+- **Deep Research**: Uses Firecrawl v2 to search the web and scrape official specifications.
 - **Structured Synthesis**: Combines all data into a validated Pydantic JSON schema.
+- **Localized Pricing**: Automatically researches and provides estimated values in **Indian Rupees (INR)**.
 - **E-commerce & Insurance Ready**: Tailored for generating professional product profiles.
 
 ## Setup
