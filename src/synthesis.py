@@ -3,6 +3,9 @@ from google import genai
 from google.genai import types
 from .models import ProductCatalogEntry
 from .vision import VisionIdentification
+from .utils import get_logger, SynthesisError
+
+logger = get_logger(__name__)
 
 def synthesize_product_data(
     vision_data: VisionIdentification, 
@@ -12,12 +15,11 @@ def synthesize_product_data(
     """
     Combines visual identification data and web research content into a structured ProductCatalogEntry.
     """
+    logger.info(f"Synthesizing data for {vision_data.brand} {vision_data.model_name}")
     client = genai.Client(api_key=api_key)
     
-    # Prepare the research context, limiting size to avoid token issues if content is huge
     research_context = ""
     for url, content in research_results.items():
-        # Truncate content if necessary to keep it manageable
         truncated_content = content[:10000] 
         research_context += f"Source: {url}\n\n{truncated_content}\n\n---\n\n"
         
@@ -40,24 +42,29 @@ def synthesize_product_data(
     - If specifications conflict, prioritize information from official-looking source URLs.
     """
     
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            response_schema=ProductCatalogEntry
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=ProductCatalogEntry
+            )
         )
-    )
-    
-    final_entry = response.parsed
-    # Ensure source URLs are included
-    if not final_entry.source_urls:
-        final_entry.source_urls = list(research_results.keys())
-    
-    # Ensure brand and model are consistent with vision if research is vague
-    if not final_entry.brand:
-        final_entry.brand = vision_data.brand
-    if not final_entry.model_name:
-        final_entry.model_name = vision_data.model_name
         
-    return final_entry
+        final_entry = response.parsed
+        
+        # Post-processing for completeness
+        if not final_entry.source_urls:
+            final_entry.source_urls = list(research_results.keys())
+        
+        if not final_entry.brand:
+            final_entry.brand = vision_data.brand
+        if not final_entry.model_name:
+            final_entry.model_name = vision_data.model_name
+            
+        logger.info("Successfully synthesized product profile.")
+        return final_entry
+    except Exception as e:
+        logger.error(f"Synthesis failed: {e}")
+        raise SynthesisError(f"Data synthesis failed: {e}")
