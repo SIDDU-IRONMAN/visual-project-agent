@@ -1,5 +1,4 @@
-def main():
-    print("Hello from research_agent!")
+from src.main import main
 
 if __name__ == "__main__":
     main()
