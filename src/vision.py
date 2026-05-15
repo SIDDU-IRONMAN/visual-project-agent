@@ -43,7 +43,8 @@ def identify_product(image_path: str, api_key: str) -> VisionIdentification:
     
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-flash-latest",
+
             contents=[
                 prompt,
                 types.Part.from_bytes(data=image_bytes, mime_type=mime_type)

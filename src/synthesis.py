@@ -24,27 +24,31 @@ def synthesize_product_data(
         research_context += f"Source: {url}\n\n{truncated_content}\n\n---\n\n"
         
     prompt = f"""
-    You are an expert product cataloger. I have identified a product from an image and gathered supplementary research from the web.
+    You are an expert product cataloger and technical writer. I have identified a product from an image and gathered supplementary research from the web.
     
-    Vision Analysis:
+    Vision Analysis (Primary Identification):
     - Brand: {vision_data.brand}
     - Model: {vision_data.model_name}
     - Category: {vision_data.category}
     - Visual Features: {', '.join(vision_data.visual_features)}
     
-    Web Research Content:
+    Web Research Content (Source Materials):
     {research_context if research_context else "No web research available."}
     
     Task:
-    Synthesize all the information above into a comprehensive, structured product profile.
-    - Use the vision data for initial context and visual feature validation.
-    - Use the web research to find official descriptions, technical specifications, and estimated pricing.
-    - If specifications conflict, prioritize information from official-looking source URLs.
+    Synthesize all the information above into a professional, highly-detailed product profile.
+    
+    Requirements:
+    1. **Official Description**: Write a cohesive, marketing-ready description (2-4 paragraphs) based on the web research. If no research is found, describe it based on visual features.
+    2. **Technical Specifications**: Extract EVERY technical detail found in the research (e.g., Battery Life, Connectivity, Dimensions, Weight, Materials, Features). If no research is available, list specs that are visually obvious.
+    3. **Accuracy**: Prioritize data from official product pages or reputable tech review sites found in the research context.
+    4. **Formatting**: Ensure the output strictly follows the provided JSON schema.
     """
     
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-flash-latest",
+
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
