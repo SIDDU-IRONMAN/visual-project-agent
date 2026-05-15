@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Product Agent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#fafafa] text-[#171717] min-h-screen flex flex-col items-center py-12 px-4">
+    
+    <div class="w-full max-w-2xl space-y-8">
+        <!-- Header -->
+        <div class="text-center space-y-2">
+            <h1 class="text-3xl font-bold tracking-tight">Visual Product Agent</h1>
+            <p class="text-muted-foreground text-[#737373]">Identify and research any product from a single image.</p>
+        </div>
+
+        <!-- Upload Card -->
+        <div class="bg-white border border-[#e5e5e5] rounded-xl shadow-sm p-8 space-y-6">
+            <div id="drop-zone" class="border-2 border-dashed border-[#e5e5e5] rounded-lg p-12 text-center cursor-pointer hover:border-[#a3a3a3] transition-colors bg-[#fafafa]">
+                <input type="file" id="file-input" class="hidden" accept="image/*">
+                <div class="space-y-4">
+                    <div class="flex justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#a3a3a3]"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Click to upload or drag and drop</p>
+                        <p class="text-xs text-[#737373]">PNG, JPG or WebP (max. 10MB)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="status-container" class="hidden space-y-4">
+                <div class="flex items-center justify-between text-sm">
+                    <span id="status-text" class="font-medium">Processing...</span>
+                    <span id="status-percentage" class="text-[#737373]">0%</span>
+                </div>
+                <div class="w-full bg-[#f5f5f5] rounded-full h-2">
+                    <div id="progress-bar" class="bg-black h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <button id="analyze-btn" class="w-full bg-black text-white font-medium py-2.5 rounded-lg hover:bg-[#262626] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                Analyze Product
+            </button>
+        </div>
+
+        <!-- Result Container -->
+        <div id="result-container" class="hidden space-y-6">
+            <div class="bg-white border border-[#e5e5e5] rounded-xl shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-[#e5e5e5] flex justify-between items-center bg-[#fafafa]">
+                    <h2 class="font-semibold text-lg" id="result-title">Product Details</h2>
+                    <span id="result-category" class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-black text-white uppercase tracking-wider"></span>
+                </div>
+                <div class="p-6 space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs font-medium text-[#737373] uppercase">Brand</p>
+                            <p class="text-sm font-semibold" id="result-brand"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-[#737373] uppercase">Model</p>
+                            <p class="text-sm font-semibold" id="result-model"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-[#737373] uppercase mb-1">Description</p>
+                        <p class="text-sm text-[#404040] leading-relaxed" id="result-desc"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-[#737373] uppercase mb-2">Specifications</p>
+                        <div id="result-specs" class="space-y-2">
+                            <!-- Specs will be injected here -->
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-[#f5f5f5] flex justify-between items-center">
+                        <p class="text-sm font-medium">Estimated Value</p>
+                        <p class="text-lg font-bold" id="result-value"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <details class="bg-white border border-[#e5e5e5] rounded-xl shadow-sm">
+                <summary class="p-4 cursor-pointer font-medium text-sm select-none">Raw JSON Output</summary>
+                <div class="p-4 pt-0">
+                    <pre id="raw-json" class="text-xs bg-[#f8f8f8] p-4 rounded-lg overflow-x-auto border border-[#f0f0f0]"></pre>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

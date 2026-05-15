@@ -30,16 +30,27 @@ A multimodal AI agent that takes an image of a product, identifies it using Gemi
 
 ## Usage
 
+### CLI Version
 Run the agent by providing a path to a product image:
-
 ```bash
 python main.py path/to/your/image.jpg
 ```
 
-The agent will:
-1. Identify the product.
-2. Search and scrape the web for details.
-3. Output the final JSON to the console and save it to a local file.
+### Web Version (SPA)
+1. **Start the Backend**:
+   ```bash
+   uvicorn backend.api:app --reload
+   ```
+   The API will be available at `http://localhost:8000`.
+
+2. **Open the Frontend**:
+   Simply open `frontend/index.html` in your web browser (or use a Live Server extension).
+
+The web interface allows you to:
+- Drag and drop images (up to 10MB).
+- Watch the analysis progress in real-time.
+- View structured product details, specifications, and estimated values in a clean UI.
+- Inspect the raw JSON output.
 
 ## Development Workflow
 - `main`: Stable release branch.

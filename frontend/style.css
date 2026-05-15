@@ -1,0 +1,35 @@
+/* Shadcn-like focus rings and custom details */
+input:focus-visible, 
+button:focus-visible,
+div[id="drop-zone"]:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 2px;
+}
+
+/* Custom scrollbar for raw JSON */
+#raw-json::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+#raw-json::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#raw-json::-webkit-scrollbar-thumb {
+    background: #d4d4d4;
+    border-radius: 4px;
+}
+
+#raw-json::-webkit-scrollbar-thumb:hover {
+    background: #a3a3a3;
+}
+
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #e5e5e5;
+}
